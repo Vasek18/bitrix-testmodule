@@ -9,7 +9,7 @@ global $APPLICATION;
 ?>
 
 <?
-$module_id = "aristov.testmodule";
+$module_id = "testmodule";
 
 $RIGHT = $APPLICATION->GetGroupRight($module_id);
 if($RIGHT >= "R"){

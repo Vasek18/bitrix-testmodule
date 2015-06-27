@@ -35,12 +35,14 @@ Class testmodule extends CModule{
 	function InstallDB(){
 		RegisterModule($this->MODULE_ID);
 
+		// региструем код, который будет выполняться OnProlog
 		RegisterModuleDependences("main", "OnProlog", $this->MODULE_ID, "TestModuleOnPageLoad", "testModuleMainHandler");
 
 		return true;
 	}
 
 	function UnInstallDB(){
+		// именно в таком порядке
 		UnRegisterModuleDependences("main", "OnProlog", $this->MODULE_ID, "TestModuleOnPageLoad", "testModuleMainHandler");
 		
 		UnRegisterModule($this->MODULE_ID);
@@ -71,7 +73,7 @@ Class testmodule extends CModule{
 	}
 	// функция удаления компонента
 	function UnInstallComponent(){
-		DeleteDirFilesEx("/bitrix/components/testmodule/");
+		DeleteDirFilesEx("/bitrix/components/".$this->MODULE_ID."/");
 		return true;
 	}
 
@@ -86,7 +88,7 @@ Class testmodule extends CModule{
 		$step = IntVal($step);
 		
 		if($step<2){
-			$APPLICATION->IncludeAdminFile(GetMessage("TESTMODULE_INSTALL").$this->MODULE_ID, $DOCUMENT_ROOT."/bitrix/modules/".$this->MODULE_ID."/install/step1.php");
+			$APPLICATION->IncludeAdminFile(GetMessage("V_MODULE_INSTALL").$this->MODULE_ID, $DOCUMENT_ROOT."/bitrix/modules/".$this->MODULE_ID."/install/step1.php");
 			
 		}elseif($step==2){
 			// echo "<pre>";
@@ -98,7 +100,7 @@ Class testmodule extends CModule{
 			
 			$this->InstallDB();
 			
-			$APPLICATION->IncludeAdminFile(GetMessage("TESTMODULE_INSTALL").$this->MODULE_ID, $DOCUMENT_ROOT."/bitrix/modules/".$this->MODULE_ID."/install/step2.php");
+			$APPLICATION->IncludeAdminFile(GetMessage("V_MODULE_INSTALL").$this->MODULE_ID, $DOCUMENT_ROOT."/bitrix/modules/".$this->MODULE_ID."/install/step2.php");
 			
 			LocalRedirect("module_admin.php?lang=".LANGUAGE_ID);
 		}
@@ -114,7 +116,7 @@ Class testmodule extends CModule{
 		$step = IntVal($step);
 		
 		if($step<2)
-			$APPLICATION->IncludeAdminFile(GetMessage("TESTMODULE_INSTALL"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".$this->MODULE_ID."/install/unstep1.php");
+			$APPLICATION->IncludeAdminFile(GetMessage("V_MODULE_UNINSTALL"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".$this->MODULE_ID."/install/unstep1.php");
 		
 		elseif($step==2){
 			// echo "<pre>";
@@ -129,7 +131,7 @@ Class testmodule extends CModule{
 			$GLOBALS["CACHE_MANAGER"]->CleanAll();
 			$GLOBALS["stackCacheManager"]->CleanAll();
 			
-			$APPLICATION->IncludeAdminFile(GetMessage("TESTMODULE_INSTALL"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".$this->MODULE_ID."/install/unstep2.php");
+			$APPLICATION->IncludeAdminFile(GetMessage("V_MODULE_UNINSTALL"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".$this->MODULE_ID."/install/unstep2.php");
 		}
 	}
 }
